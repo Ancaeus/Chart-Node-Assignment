@@ -1,0 +1,204 @@
+<html>
+	<head>
+		<title>Plug</title>
+		<meta name="author" content="">
+		<meta name="description" content="T">
+		<link rel="canonical" href="">
+		<meta itemprop="name" content="">
+		<meta itemprop="description" content="">
+		<meta itemprop="image" content="http://yt3.ggpht.com/-sJ9gFSk9jJs/U5yIWwQ0-QI/AAAAAAAAAAU/OKTRplYxvbs/w1060-fcrop64=1,00005a57ffffa5a8-nd/back.png">
+		<script src="angular.js" type="text/javascript"></script>
+		<script src="app.js" type="text/javascript"></script>
+		<script src="core.js" type="text/javascript"></script>
+		<script src="loading-bar.js" type="text/javascript"></script>
+		
+		<link href="loading-bar.css" type="text/css" rel="stylesheet">
+		<link href='http://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Nunito' rel='stylesheet' type='text/css'>
+		<link href="style.css" type="text/css" rel="stylesheet">
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+		
+	</head>
+	<body>
+		<div id="container" ng-app='demos_cfg' ng-controller='main_control'>
+			<span id="header"></span><span id="demo">Georgios Alexandrou Skills</span><br />
+					
+			<table id="showit">		
+				<tr><td>Paramter</td><td>Value</td><td>Time</td></tr>		
+			<tr ng-repeat="values in loaded_demos | filter:search">
+			
+				<td>Current</td>
+				<td id="valueid" value={{data.value}} >0.{{values.value}} A</td>
+				<td>{{values.time}}<a href="{{data.link}}" target='_blank'>Read Article</a></button></td>
+			</tr>
+				<tr>
+				<td>Voltage</td>
+				<td id="valueid">7 V</td>
+			</tr>
+		</tr>
+		<tr>
+		<td>Frequency</td>
+		<td id="valueid">49,5</td>
+	</tr>
+	<tr>
+			<td>Phase Difference</td>
+			<td id="valueid">11 dg</td>
+		</tr>
+				
+							
+			<!--	<td><button id="demobutton"><a href="{{data.demo_link}}" target='_blank'>Live Demo</a></button></td> -->
+			<!--	<td><button id="downloadbutton"><a href="{{data.download}}" target='_blank'>Download</a></button></td> -->
+				</tr>
+			</table>
+			
+	
+				
+			
+			</div>	
+			
+			</div>
+			<!--<div id="projector">
+				<div class="slidecontainer">
+						<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+					  </div>
+					  <div id="VoltageSlider"></div>
+			<canvas id="myChart" width="550" height="550"></canvas>
+		</div> -->
+		
+				
+
+				
+			<script type="text/javascript">
+		
+	
+
+
+
+
+
+			</script>
+			<script>
+var slider = document.getElementById("myRange");
+var output = document.getElementById("VoltageSlider");
+output.innerHTML = slider.value; // Display the default slider value
+slider.oninput = function() {
+
+  output.innerHTML = this.value;
+ 
+} 		    
+            var PowerValue=0;
+			var currentValue=0;
+			//	var value= angular.module("demos-cfg", ); 
+			
+			//var value=  document.getElementById("valueid").innerHTML
+			//console.log("I got the street name "+$("#valueid").val());
+			var ctx = document.getElementById('myChart').getContext('2d');	
+			var datavar= [];
+			var labels=[];
+			var backgroundRGB= 'rgb(255, 255, 132)';
+			var data = {
+        labels: labels,
+        datasets: [{
+            label: 'Power',
+            backgroundColor: backgroundRGB,
+			borderColor: 'rgb(255, 255, 132)',
+			showLine:true,
+			
+            data: datavar
+        }]
+    }
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+   
+
+    // Configuration options go here
+    options: {}
+});
+var min=10;
+var max =360;
+var voltageValue=7;
+var phaseDiff=11;
+function randomIntInc(low, high) {
+  return Math.floor(Math.random() * (high - low + 1) + low)
+}
+function getDeviceData(){
+      
+	var dom_el = document.querySelector('[ng-controller="main_control"]');
+				var ng_el = angular.element(dom_el);
+				var ng_el_scope = ng_el.scope();
+				 currentValueTemp = ng_el_scope.loaded_demos.values.value;
+				 currentValueTemp = parseInt(currentValueTemp);
+				 currentValue = currentValueTemp/100;
+				 var sindiff=Math.cos(phaseDiff);
+				 PowerValue= currentValue*voltageValue*sindiff;
+				 PowerValue=Math.abs(PowerValue);
+				console.log("Power: " + PowerValue + " -  "  + "Current : " + currentValue + " - " + "voltage : " + voltageValue + " - " + "phaseDiffsin :" + sindiff  );
+}
+function adddata(PowerValue){
+	
+				
+	var TimeNow=new Date().getHours() + ':'+ new Date().getMinutes() +' : ' + new Date().getSeconds();
+				    //myLineChart.data.datasets[0].data[datavar.length]=randomIntInc(min,max);
+					myLineChart.data.datasets[0].data[datavar.length]=PowerValue;
+				
+					//myLineChart.data.datasets[0].data[datavar.length].backgroundColor='rgb(255, 255, 132)';
+					myLineChart.data.labels[labels.length]= TimeNow ;
+					myLineChart.data.backgroundColor='rgb(255, 255, 132)';
+					myLineChart.data.datasets[0].borderColor='rgb(255, 255, 132)';
+					myLineChart.data.datasets[0].backgroundColor =   "rgba(000,111,111,55)" ; 
+					myLineChart.fill=true;
+					myLineChart.data.datasets[0].showLines=true;
+				
+				//	myLineChart.update();
+			
+			
+				//console.log(e);
+				}
+				function getSpeed(output){
+				output=this;
+				
+				};
+			setInterval(function() {
+				getSpeed();
+				if(myLineChart.data.labels.length>25){
+					removeData(myLineChart);
+				}
+				getDeviceData();
+				
+				adddata(PowerValue);
+				myLineChart.update();
+			}, 1000 );
+			function removeData(chart) {
+				chart.data.datasets[0].data.shift();
+				chart.data.labels.shift();
+				//	myLineChart.data.datasets[0].data[0].pop();
+           
+  //  chart.update();
+}
+
+			var myLineChart = Chart.Line(ctx,{
+				backgroundColor: backgroundRGB,
+                borderColor: 'rgb(255, 255, 132)',
+				data:data,
+				borderJoinStyle:'miter',
+				labels:labels,
+				fill:true,
+				showLine:true,
+				responsive: true
+				
+				
+			});
+			
+			</script>
+			<div class="ldBar"
+			style="width:100%;height:60px",
+			data-stroke="data:ldbar/res,gradient(0,1,#9df,#9fd,#df9,#fd9)",
+			data-path="M10 20Q20 15 30 20Q40 25 50 20Q60 15 70 20Q80 25 90 20"></div>
+	</body>
+	
+</html>
