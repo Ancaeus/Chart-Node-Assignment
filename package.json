@@ -6,7 +6,7 @@
   "dependencies": {
     "chartjs": "^0.3.24",
     "cheerio": "^1.0.0-rc.3",
-    "ejs": "^1.0.0",
+    "ejs": "^2.5.5",
     "express": "^4.8.6",
     "htmlparser": "^1.7.7",
     "jsdom": "^15.0.0",
